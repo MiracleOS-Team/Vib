@@ -1,0 +1,6 @@
+name: edit-packages
+type: apt
+source:
+  packages:
+  - nano
+  - vim

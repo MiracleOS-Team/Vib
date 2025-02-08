@@ -1,0 +1,19 @@
+# Stage: build
+FROM debian:sid-slim AS build
+LABEL maintainer='Vanilla OS Contributors'
+ARG DEBIAN_FRONTEND=noninteractive
+RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommends
+ADD includes.container /
+ADD sources /sources
+RUN apt-get update
+RUN apt install -y  libbtrfs-dev golang-go  && apt clean && cd /sources/abroot-git && go build -o /usr/local/bin/abroot
+RUN apt install -y  xterm && apt clean
+# Stage: test
+FROM debian:sid-slim AS test
+COPY --from=build /usr/local/bin/abroot /usr/local/bin/abroot
+LABEL maintainer='Vanilla OS Contributors'
+ARG DEBIAN_FRONTEND=noninteractive
+RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/01norecommends
+ADD includes.container /
+ADD sources /sources
+RUN ls -l /usr/local/bin/abroot

@@ -1,0 +1,6 @@
+name: net-packages
+type: apt
+source:
+  packages:
+  - wget
+  - curl
